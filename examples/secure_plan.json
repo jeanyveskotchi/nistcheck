@@ -1,0 +1,98 @@
+{
+  "format_version": "1.2",
+  "planned_values": {
+    "root_module": {
+      "resources": [
+        {
+          "address": "aws_security_group.web",
+          "type": "aws_security_group",
+          "name": "web",
+          "values": {
+            "ingress": [
+              {
+                "from_port": 443,
+                "to_port": 443,
+                "protocol": "tcp",
+                "cidr_blocks": [
+                  "0.0.0.0/0"
+                ]
+              },
+              {
+                "from_port": 22,
+                "to_port": 22,
+                "protocol": "tcp",
+                "cidr_blocks": [
+                  "10.0.0.0/16"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "address": "aws_s3_bucket.logs",
+          "type": "aws_s3_bucket",
+          "name": "logs",
+          "values": {
+            "bucket": "demo-logs",
+            "acl": "private"
+          }
+        },
+        {
+          "address": "aws_db_instance.app",
+          "type": "aws_db_instance",
+          "name": "app",
+          "values": {
+            "engine": "postgres",
+            "storage_encrypted": true,
+            "publicly_accessible": false
+          }
+        },
+        {
+          "address": "aws_ebs_volume.data",
+          "type": "aws_ebs_volume",
+          "name": "data",
+          "values": {
+            "size": 20,
+            "encrypted": true
+          }
+        },
+        {
+          "address": "aws_iam_policy.reader",
+          "type": "aws_iam_policy",
+          "name": "reader",
+          "values": {
+            "policy": "{\"Version\": \"2012-10-17\", \"Statement\": [{\"Effect\": \"Allow\", \"Action\": [\"s3:GetObject\"], \"Resource\": \"arn:aws:s3:::demo-logs/*\"}]}"
+          }
+        },
+        {
+          "address": "aws_cloudtrail.main",
+          "type": "aws_cloudtrail",
+          "name": "main",
+          "values": {
+            "name": "main",
+            "enable_logging": true
+          }
+        },
+        {
+          "address": "oci_core_security_list.app",
+          "type": "oci_core_security_list",
+          "name": "app",
+          "values": {
+            "ingress_security_rules": [
+              {
+                "source": "0.0.0.0/0",
+                "protocol": "6",
+                "tcp_options": [
+                  {
+                    "min": 443,
+                    "max": 443
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

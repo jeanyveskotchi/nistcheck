@@ -1,0 +1,86 @@
+{
+  "format_version": "1.2",
+  "planned_values": {
+    "root_module": {
+      "resources": [
+        {
+          "address": "aws_security_group.web",
+          "type": "aws_security_group",
+          "name": "web",
+          "values": {
+            "ingress": [
+              {
+                "from_port": 443,
+                "to_port": 443,
+                "protocol": "tcp",
+                "cidr_blocks": [
+                  "0.0.0.0/0"
+                ]
+              },
+              {
+                "from_port": 22,
+                "to_port": 22,
+                "protocol": "tcp",
+                "cidr_blocks": [
+                  "0.0.0.0/0"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "address": "aws_s3_bucket.logs",
+          "type": "aws_s3_bucket",
+          "name": "logs",
+          "values": {
+            "bucket": "demo-logs",
+            "acl": "public-read"
+          }
+        },
+        {
+          "address": "aws_db_instance.app",
+          "type": "aws_db_instance",
+          "name": "app",
+          "values": {
+            "engine": "postgres",
+            "storage_encrypted": false,
+            "publicly_accessible": true
+          }
+        },
+        {
+          "address": "aws_iam_policy.admin",
+          "type": "aws_iam_policy",
+          "name": "admin",
+          "values": {
+            "policy": "{\"Version\": \"2012-10-17\", \"Statement\": [{\"Effect\": \"Allow\", \"Action\": \"*\", \"Resource\": \"*\"}]}"
+          }
+        },
+        {
+          "address": "aws_cloudtrail.main",
+          "type": "aws_cloudtrail",
+          "name": "main",
+          "values": {
+            "name": "main",
+            "enable_logging": false
+          }
+        }
+      ],
+      "child_modules": [
+        {
+          "address": "module.storage",
+          "resources": [
+            {
+              "address": "module.storage.oci_objectstorage_bucket.public",
+              "type": "oci_objectstorage_bucket",
+              "name": "public",
+              "values": {
+                "name": "public",
+                "access_type": "ObjectRead"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
